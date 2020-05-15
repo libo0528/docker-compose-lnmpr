@@ -1,0 +1,91 @@
+version: '3'
+services:
+    nginx:
+        # 容器名称
+        container_name: "compose-nginx"
+        image: nginx:latest
+        restart: always
+        # 端口映射
+        ports:
+            - "80:80"
+            - "443:443"
+        environment:
+            - TZ=Asia/Shanghai
+        # 依赖关系 先跑php
+        depends_on:
+            - "php"
+        # 数据卷
+        volumes:
+            # 映射主机./conf.d目录到容器/etc/nginx/conf.d目录
+            - "/data/nginx/conf.d:/etc/nginx/conf.d"
+            - "/data/nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
+            - "/data/nginx/html:/usr/share/nginx/html"
+            - "/data/nginx/log:/var/log/nginx/"
+        networks:
+            app_net:
+                ipv4_address: 10.10.10.2
+    php:
+        build: ./php-extension
+        image: php:7.4
+        restart: always
+        ports:
+            - "9000:9000"
+        volumes:
+            - "/data/nginx/html:/var/www/html"
+            - "/data/php74/etc:/usr/local/etc"
+            - "/data/php74/log:/var/log/php"
+        stdin_open: true
+        tty: true   #这两条是防止启动php失败
+        links:
+            - "mysql"
+        networks:
+            app_net:
+                ipv4_address: 10.10.10.3
+        environment:
+            - TZ=Asia/Shanghai # 设置时区
+        container_name: "compose-php"
+    mysql:
+        image: mysql:5.7
+        ports:
+            - "3306:3306"
+        volumes:
+            - /data/mysql/data:/var/lib/mysql
+            - /data/mysql/conf:/etc/mysql/conf.d
+            - /data/mysql/logs:/data/mysql/logs
+        restart: always
+        # 环境变量
+        environment:
+            - TZ=Asia/Shanghai # 设置时区
+            # mysql密码
+            - MYSQL_ROOT_PASSWORD=libo0528?
+        networks:
+            app_net:
+                ipv4_address: 10.10.10.1     
+        container_name: "compose-mysql"
+    redis:
+        # 指定镜像
+        image: redis:5
+        restart: always
+        ports:
+        # 端口映射
+            - 6379:6379
+        volumes:
+        # 目录映射
+            - "/data/redis/conf:/usr/local/etc/redis"
+            - "/data/redis/data:/data"
+        command:
+         # 执行的命令
+          redis-server /usr/local/etc/redis/redis.conf --requirepass libo0528?
+        environment:
+            - TZ=Asia/Shanghai # 设置时区
+        container_name: "compose-redis"
+networks:
+    # 配置docker network
+    app_net:
+        driver: bridge
+        driver_opts:
+          com.docker.network.enable_ipv6: "true"
+        ipam:
+            config:
+                # 子网络
+                - subnet: 10.10.0.0/16

@@ -1,0 +1,4 @@
+先运行
+docker-compose build
+再执行
+docker-compose up -d
