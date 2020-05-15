@@ -9,7 +9,7 @@ docker-compose搭建LNMP环境映射文件目录，clone到指定data目录，�
 
 #### 安装教程
 
-1.  `git clone https://gitee.com/mayun_libo/compose_nmp74.git data`
+1.  `git clone https://github.com/libo0528/docker-compose-lnmpr.git data`
 2.  `cd /data/docker-compose`
 3.  `docker-compose build`
 4.  `docker-compose up -d`
