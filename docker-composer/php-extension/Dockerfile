@@ -17,7 +17,8 @@ deb-src http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib
     libjpeg62-turbo-dev \
     libmcrypt-dev \
     libpng-dev \
-    && docker-php-ext-install -j$(nproc) gd iconv  pdo_mysql mysqli \
+     && docker-php-ext-configure gd  --with-webp=/usr/include/webp --with-jpeg=/usr/include --with-freetype=/usr/include/freetype2/ \
+    && docker-php-ext-install -j$(nproc) gd iconv  pdo_mysql  mysqli bcmath calendar exif gettext sockets dba  pcntl  shmop sysvmsg sysvsem sysvshm \
     && pecl install redis-5.1.1 \
     && pecl install imagick \
     && pecl install mcrypt \
