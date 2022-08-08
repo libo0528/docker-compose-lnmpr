@@ -3,6 +3,9 @@
 #### 介绍
 docker-compose搭建PHP7.4（含扩展）+MySQL5.7+nginx+redis5.1
 
+#### 环境
+Linux CentOS7
+
 #### 软件架构
 docker-compose搭建LNMP环境映射文件目录，clone到指定data目录，可以一键安装
 
