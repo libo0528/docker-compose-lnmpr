@@ -24,3 +24,8 @@ docker-compose搭建LNMP环境映射文件目录，clone到指定data目录，�
 3.  在/data/docker-compose 目录下执行安装命令
 
 
+
+
+### Infrastructure model
+
+![Infrastructure model](.infragenie/infrastructure_model.png)
